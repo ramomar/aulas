@@ -1,0 +1,29 @@
+{
+  "name": "horario",
+  "author": "Omar Garza",
+  "version": "1.0.0",
+  "keywords": ["schedule"],
+  "private": true,
+  "dependencies": {},
+  "pebble": {
+    "displayName": "horario",
+    "uuid": "4f67e77f-a9e9-4ea6-ae58-71e5c704e0f4",
+    "sdkVersion": "3",
+    "enableMultiJS": true,
+    "targetPlatforms": [
+      "aplite",
+      "basalt",
+      "chalk",
+      "diorite"
+    ],
+    "watchapp": {
+      "watchface": false
+    },
+    "messageKeys": [
+      "dummy"
+    ],
+    "resources": {
+      "media": []
+    }
+  }
+}
