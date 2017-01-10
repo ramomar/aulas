@@ -2,9 +2,14 @@
   "name": "horario",
   "author": "Omar Garza",
   "version": "1.0.0",
-  "keywords": ["schedule"],
+  "keywords": [
+    "schedule"
+  ],
   "private": true,
-  "dependencies": {},
+  "scripts": {
+    "test": "export NODE_PATH=./app; mocha --recursive",
+    "console": "export NODE_PATH=./app/; node"
+  },
   "pebble": {
     "displayName": "horario",
     "uuid": "4f67e77f-a9e9-4ea6-ae58-71e5c704e0f4",
@@ -25,5 +30,12 @@
     "resources": {
       "media": []
     }
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  },
+  "dependencies": {
+    "moment": "^2.17.1"
   }
 }
