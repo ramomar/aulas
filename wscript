@@ -34,7 +34,7 @@ def build(ctx):
         ctx.env = ctx.all_envs[platform]
         ctx.set_group(ctx.env.PLATFORM_NAME)
         app_elf = '{}/pebble-app.elf'.format(ctx.env.BUILD_DIR)
-        ctx.pbl_build(source=ctx.path.ant_glob('src/c/**/*.c'), target=app_elf, bin_type='app')
+        ctx.pbl_build(source=ctx.path.ant_glob('app/watch/**/*.c'), target=app_elf, bin_type='app')
 
         if build_worker:
             worker_elf = '{}/pebble-worker.elf'.format(ctx.env.BUILD_DIR)
@@ -50,5 +50,6 @@ def build(ctx):
     ctx.pbl_bundle(binaries=binaries,
                    js=ctx.path.ant_glob(['src/pkjs/**/*.js',
                                          'src/pkjs/**/*.json',
-                                         'src/common/**/*.js']),
-                   js_entry_file='src/pkjs/index.js')
+                                         'src/common/**/*.js',
+                                         'app/mobile/**/*.js']),
+                   js_entry_file='app/mobile/main.js')
