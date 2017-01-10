@@ -2,10 +2,9 @@ const assert = require('chai').assert;
 const moment = require('moment');
 
 const scheduleJson = require('./schedule.json');
-const Schedule     = require('js/schedule/schedule.js')(scheduleJson);
+const Schedule     = require('mobile/schedule/schedule.js')(scheduleJson);
 
 describe('Schedule#weekdayCourses', function test() {
-
   it('should yield the courses for a given weekday', function() {
     const expected = ['VISIO', 'SISINT', 'VERISOFT'];
     const actual = Schedule.weekdayCourses(1).courses.map(c => c.names.short);
@@ -14,8 +13,7 @@ describe('Schedule#weekdayCourses', function test() {
   });
 });
 
-describe('Courses#Sessions#current', function test() {
-
+describe('Schedule#weekdayCourses#current', function test() {
   it('should yield the current session for a given time', function() {
     const time = moment('7:00', ['H:m']);
 
@@ -36,71 +34,70 @@ describe('Courses#Sessions#current', function test() {
     assert.equal(actual.courseNames.short, expected.courseNames.short);
     assert.equal(actual.weekday, expected.weekday);
     assert.equal(actual.turn, expected.turn);
+    assert.equal(actual.classroom, expected.classroom);
     assert.equal(actual.startTimeStr, expected.startTimeStr);
+    assert.equal(actual.endTimeStr, expected.endTimeStr);
   });
 });
 
-describe('Courses#Sessions#total', function test() {
-  it ('should yield the number of sessions for the day', function () {
-    const expected = 3;
-    const actual = Schedule.weekdayCourses(1).sessions.total;
+describe('Schedule#weekdayCourses#available', function test() {
+  it('should return the available sessions for the day', function () {
+    const expected = [
+      {name: 'VISIO', time: '8:40'},
+      {name: 'SISINT', time: '12:50'},
+      {name: 'VERISOFT', time: '17:00'}
+    ];
+    const actual   = Schedule.weekdayCourses(1)
+      .sessions
+      .available
+      .map(toTestFmt);
 
-    assert.equal(actual, expected);
+    assert.sameDeepMembers(actual, expected);
   });
 });
 
-describe('Courses#Sessions#remainingCount', function test() {
-  it ('should yield the number of remaining sessions for the day given a time',
-    function () {
-      const time1 = moment('9:29', ['H:m']);
-
-      const expected1 = 3;
-      const actual1   = Schedule
-        .weekdayCourses(1)
-        .sessions
-        .remainingCount(time1);
-
-      const time2 = moment('9:30', ['H:m']);
-
-      const expected2 = 2;
-      const actual2   = Schedule
-        .weekdayCourses(1)
-        .sessions.remainingCount(time2);
-
-      assert.equal(actual1, expected1);
-      assert.equal(actual2, expected2);
-    });
-});
-
-describe('Courses#Sessions#remaining', function test() {
+describe('Schedule#weekdayCourses#remaining', function test() {
   it ('should yield the remaining sessions for the day given a time',
     function () {
-      const time = moment('9:30', ['H:m']);
-
-      const expected = ['SISINT', 'VERISOFT'];
-      const actual   = Schedule
+      const timeA = moment('9:29', ['H:m']);
+      const expectedA = [
+        {name: 'VISIO', time: '8:40'},
+        {name: 'SISINT', time: '12:50'},
+        {name: 'VERISOFT', time: '17:00'}
+      ];
+      const actualA = Schedule
         .weekdayCourses(1)
         .sessions
-        .remaining(time)
-        .map(s => s.courseNames.short);
+        .remaining(timeA)
+        .map(toTestFmt);
 
-      assert.sameMembers(actual, expected);
+      const timeB = moment('9:30', ['H:m']);
+      const expectedB = [
+        {name: 'SISINT', time: '12:50'},
+        {name: 'VERISOFT', time: '17:00'}
+      ];
+      const actualB = Schedule
+        .weekdayCourses(1)
+        .sessions
+        .remaining(timeB)
+        .map(toTestFmt);
+
+      assert.sameDeepMembers(actualA, expectedA);
+      assert.sameDeepMembers(actualB, expectedB);
     });
 });
 
-describe('Courses#Sessions#remainingMinutes', function test() {
+describe('Schedule#weekdayCourses#remainingMinutes', function test() {
   it ('should yield the remaining minutes of sessions for the day given a time',
     function () {
-      const time1 = moment('9:29', ['H:m']);
-
+      const time1     = moment('9:29', ['H:m']);
       const expected1 = 150;
       const actual1   = Schedule
         .weekdayCourses(1)
         .sessions
         .remainingMinutes(time1);
 
-      const time2 = moment('9:30', ['H:m']);
-
+      const time2     = moment('9:30', ['H:m']);
       const expected2 = 100;
       const actual2   = Schedule
         .weekdayCourses(1)
@@ -110,3 +107,10 @@ describe('Courses#Sessions#remainingMinutes', function test() {
       assert.equal(actual2, expected2);
     });
 });
+
+function toTestFmt(session) {
+  return {
+    name: session.courseNames.short,
+    time: session.startTimeStr
+  };
+}

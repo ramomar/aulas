@@ -27,7 +27,6 @@ function loadSchedule(schedule) {
 }
 
 const Schedule = function(schedule) {
-
   function sessionsAscendingOrder(s1, s2) {
     if (s1.startTime.isBefore(s2.startTime)) return -1;
     else                                     return 1;
@@ -62,10 +61,6 @@ const Schedule = function(schedule) {
         s.endTime.isAfter(time));
     }
 
-    function remainingSessionsCount(sessions) {
-      return (time) => remainingSessions(sessions)(time).length;
-    }
-
     function remainingMinutes(sessions) {
       return (time) =>
         remainingSessions(sessions)(time)
@@ -77,14 +72,11 @@ const Schedule = function(schedule) {
       available:        availableSessions,
       current:          currentSession(availableSessions),
       remaining:        remainingSessions(availableSessions),
-      remainingCount:   remainingSessionsCount(availableSessions),
-      total:            availableSessions.length,
       remainingMinutes: remainingMinutes(availableSessions)
     };
   }
 
   function weekdayCourses(weekday) {
-
     function isSessionScheduled(session) {
       return session.weekday === weekday;
     }
