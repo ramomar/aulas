@@ -57,9 +57,9 @@ describe('Schedule#weekdayCourses#available', function test() {
 });
 
 describe('Schedule#weekdayCourses#remaining', function test() {
-  it ('should yield the remaining sessions for the day given a time',
+  it('should yield the remaining sessions for the day given a time',
     function () {
-      const timeA = moment('9:29', ['H:m']);
+      const timeA = moment('6:00', ['H:m']);
       const expectedA = [
         {name: 'VISIO', time: '8:40'},
         {name: 'SISINT', time: '12:50'},
@@ -88,24 +88,55 @@ describe('Schedule#weekdayCourses#remaining', function test() {
 });
 
 describe('Schedule#weekdayCourses#remainingMinutes', function test() {
-  it ('should yield the remaining minutes of sessions for the day given a time',
+  it('should yield the remaining minutes of sessions for the day given a time',
     function () {
-      const time1     = moment('9:29', ['H:m']);
-      const expected1 = 150;
-      const actual1   = Schedule
+      const timeA     = moment('6:00', ['H:m']);
+      const expectedA = 150;
+      const actualA   = Schedule
         .weekdayCourses(1)
         .sessions
-        .remainingMinutes(time1);
+        .remainingMinutes(timeA);
 
-      const time2     = moment('9:30', ['H:m']);
-      const expected2 = 100;
-      const actual2   = Schedule
+      const timeB     = moment('9:30', ['H:m']);
+      const expectedB = 100;
+      const actualB   = Schedule
         .weekdayCourses(1)
-        .sessions.remainingMinutes(time2);
+        .sessions.remainingMinutes(timeB);
 
-      assert.equal(actual1, expected1);
-      assert.equal(actual2, expected2);
+      assert.equal(actualA, expectedA);
+      assert.equal(actualB, expectedB);
     });
+});
+
+describe('Schedule#weekdayCourses#minutesToNextSession', function test() {
+  it('should yield the minutes remaining to the next session', function () {
+
+    const timeA     = moment('6:00', ['H:m']);
+    const expectedA = 60;
+    const actualA   = Schedule
+      .weekdayCourses(2)
+      .sessions
+      .minutesToNextSession(timeA);
+    console.log(actualA);
+
+    const timeB     = moment('7:10', ['H:m']);
+    const expectedB = 40;
+    const actualB   = Schedule
+      .weekdayCourses(2)
+      .sessions
+      .minutesToNextSession(timeB);
+
+    const timeC     = moment('22:00', ['H:m']);
+    const expectedC = NaN;
+    const actualC   = Schedule
+      .weekdayCourses(2)
+      .sessions
+      .minutesToNextSession(timeC);
+
+    assert.equal(actualA, expectedA);
+    assert.equal(actualB, expectedB);
+    assert.deepEqual(actualC, expectedC);
+  });
 });
 
 function toTestFmt(session) {

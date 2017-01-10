@@ -48,31 +48,47 @@ const Schedule = function(schedule) {
     }, []).sort(sessionsAscendingOrder);
 
     function currentSession(sessions) {
-      return (time) => {
+      return (currentTime) => {
         const isBetween = (s) =>
-          time.isSameOrAfter(s.startTime) && time.isBefore(s.endTime);
+          currentTime.isSameOrAfter(s.startTime) &&
+          currentTime.isBefore(s.endTime);
 
         return sessions.filter(isBetween)[0];
       };
     }
 
     function remainingSessions(sessions) {
-      return (time) => sessions.filter(s =>
-        s.endTime.isAfter(time));
+      return (currentTime) => sessions.filter(session =>
+        session.endTime.isAfter(currentTime));
     }
 
     function remainingMinutes(sessions) {
-      return (time) =>
-        remainingSessions(sessions)(time)
-          .map(s => s.minutesDuration)
+      return (currentTime) =>
+        remainingSessions(sessions)(currentTime)
+          .map(session => session.minutesDuration)
           .reduce((a, b) => a + b)
     }
 
+    function minutesToNextSession(sessions) {
+      return (currentTime) => {
+        const minutes = remainingSessions(sessions)(currentTime)
+          .sort(sessionsAscendingOrder)
+          .map(s => s.startTime.diff(currentTime, 'minutes'))
+          .filter(m => m > 0);
+
+        if (minutes.length > 0)
+          return minutes.reduce((acc, e) => Math.min(acc, e));
+        else
+          return NaN;
+      }
+    }
+
     return {
-      available:        availableSessions,
-      current:          currentSession(availableSessions),
-      remaining:        remainingSessions(availableSessions),
-      remainingMinutes: remainingMinutes(availableSessions)
+      available:            availableSessions,
+      current:              currentSession(availableSessions),
+      remaining:            remainingSessions(availableSessions),
+      remainingMinutes:     remainingMinutes(availableSessions),
+      minutesToNextSession: minutesToNextSession(availableSessions)
     };
   }
 
