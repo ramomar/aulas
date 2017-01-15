@@ -25,7 +25,8 @@
       "watchface": false
     },
     "messageKeys": [
-      "dummy"
+      "MobileReady",
+      "Summary"
     ],
     "resources": {
       "media": []
