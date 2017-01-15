@@ -23,11 +23,11 @@ const Schedule = function (schedule) {
 
     function currentSession(sessions) {
       return (currentTime) => {
-        const isBetween = (s) =>
+        const currentTimeIsSessionTime = (s) =>
           currentTime.isSameOrAfter(s.startTime) &&
           currentTime.isBefore(s.endTime);
 
-        return sessions.filter(isBetween)[0];
+        return sessions.filter(currentTimeIsSessionTime)[0];
       };
     }
 

@@ -1,15 +1,15 @@
 const assert = require('chai').assert;
 const moment = require('moment');
 
-const scheduleJson = require('./schedule.json');
-const Schedule     = require('mobile/schedule.js')(scheduleJson);
+const scheduleJson = require('../schedule.json');
+const Schedule     = require('mobile/schedule/schedule.js')(scheduleJson);
 
 describe('Schedule#weekdayCourses', function test() {
   it('should yield the courses for a given weekday', function() {
     const expected = ['VISIO', 'SISINT', 'VERISOFT'];
     const actual = Schedule.weekdayCourses(1).courses.map(c => c.names.short);
 
-    assert.sameMembers(actual, expected);
+    assert.sameMembers(expected, actual);
   });
 });
 
@@ -31,12 +31,12 @@ describe('Schedule#weekdayCourses#current', function test() {
     };
     const actual = Schedule.weekdayCourses(2).sessions.current(time);
 
-    assert.equal(actual.courseNames.short, expected.courseNames.short);
-    assert.equal(actual.weekday, expected.weekday);
-    assert.equal(actual.turn, expected.turn);
-    assert.equal(actual.classroom, expected.classroom);
-    assert.equal(actual.startTimeStr, expected.startTimeStr);
-    assert.equal(actual.endTimeStr, expected.endTimeStr);
+    assert.equal(expected.courseNames.short, actual.courseNames.short);
+    assert.equal(expected.weekday, actual.weekday);
+    assert.equal(expected.turn, actual.turn);
+    assert.equal(expected.classroom, actual.classroom);
+    assert.equal(expected.startTimeStr, actual.startTimeStr);
+    assert.equal(expected.endTimeStr, actual.endTimeStr);
   });
 });
 
@@ -47,12 +47,12 @@ describe('Schedule#weekdayCourses#available', function test() {
       {name: 'SISINT', time: '12:50'},
       {name: 'VERISOFT', time: '17:00'}
     ];
-    const actual   = Schedule.weekdayCourses(1)
+    const actual = Schedule.weekdayCourses(1)
       .sessions
       .available
       .map(toTestFmt);
 
-    assert.sameDeepMembers(actual, expected);
+    assert.sameDeepMembers(expected, actual);
   });
 });
 
@@ -82,8 +82,8 @@ describe('Schedule#weekdayCourses#remaining', function test() {
         .remaining(timeB)
         .map(toTestFmt);
 
-      assert.sameDeepMembers(actualA, expectedA);
-      assert.sameDeepMembers(actualB, expectedB);
+      assert.sameDeepMembers(expectedA, actualA);
+      assert.sameDeepMembers(expectedB, actualB);
     });
 });
 
@@ -103,8 +103,8 @@ describe('Schedule#weekdayCourses#remainingMinutes', function test() {
         .weekdayCourses(1)
         .sessions.remainingMinutes(timeB);
 
-      assert.equal(actualA, expectedA);
-      assert.equal(actualB, expectedB);
+      assert.equal(expectedA, actualA);
+      assert.equal(expectedB, actualB);
     });
 });
 
@@ -133,9 +133,9 @@ describe('Schedule#weekdayCourses#minutesToNextSession', function test() {
       .sessions
       .minutesToNextSession(timeC);
 
-    assert.equal(actualA, expectedA);
-    assert.equal(actualB, expectedB);
-    assert.deepEqual(actualC, expectedC);
+    assert.equal(expectedA, actualA);
+    assert.equal(expectedB, actualB);
+    assert.deepEqual(expectedC, actualC);
   });
 });
 
