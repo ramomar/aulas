@@ -2,7 +2,7 @@ const assert = require('chai').assert;
 const moment = require('moment');
 
 const scheduleJson = require('./schedule.json');
-const Schedule     = require('mobile/schedule/schedule.js')(scheduleJson);
+const Schedule     = require('mobile/schedule.js')(scheduleJson);
 
 describe('Schedule#weekdayCourses', function test() {
   it('should yield the courses for a given weekday', function() {

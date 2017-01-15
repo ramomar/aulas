@@ -1,32 +1,6 @@
 const moment = require('moment');
 
-function loadSchedule(schedule) {
-  const toMoment = (str) => moment(str, ['H:m']);
-
-  return schedule.map(course => {
-    const sessions = course.sessions.map(session => {
-      const s = Object.assign({}, session);
-
-      s.startTimeStr    = s.startTime;
-      s.endTimeStr      = s.endTime;
-      s.startTime       = toMoment(s.startTime);
-      s.endTime         = toMoment(s.endTime);
-      s.minutesDuration = s.endTime.diff(s.startTime, 'minutes');
-
-      return s;
-    });
-
-    return {
-      names: {
-        short: course.shortName,
-        long:  course.longName
-      },
-      sessions: sessions
-    };
-  });
-}
-
-const Schedule = function(schedule) {
+const Schedule = function (schedule) {
   function sessionsAscendingOrder(s1, s2) {
     if (s1.startTime.isBefore(s2.startTime)) return -1;
     else                                     return 1;
@@ -120,5 +94,31 @@ const Schedule = function(schedule) {
     weekdayCourses
   };
 };
+
+function loadSchedule(schedule) {
+  const toMoment = (str) => moment(str, ['H:m']);
+
+  return schedule.map(course => {
+    const sessions = course.sessions.map(session => {
+      const s = Object.assign({}, session);
+
+      s.startTimeStr    = s.startTime;
+      s.endTimeStr      = s.endTime;
+      s.startTime       = toMoment(s.startTime);
+      s.endTime         = toMoment(s.endTime);
+      s.minutesDuration = s.endTime.diff(s.startTime, 'minutes');
+
+      return s;
+    });
+
+    return {
+      names: {
+        short: course.shortName,
+        long:  course.longName
+      },
+      sessions: sessions
+    };
+  });
+}
 
 module.exports = (schedule) => Schedule(loadSchedule(schedule));
