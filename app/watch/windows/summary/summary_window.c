@@ -55,7 +55,7 @@ static void render_current_classroom(Window *w) {
   current_classroom = text_layer_create(GRect(0, 120, 144, 18));
   text_layer_set_background_color(current_classroom, GColorClear);
   text_layer_set_text_color(current_classroom, GColorBlack);
-  text_layer_set_text(current_classroom, "\U0000270C" /*✌*/);
+  text_layer_set_text(current_classroom, VICTORY_EMOJI);
 
   text_layer_set_font(current_classroom, fonts_get_system_font(FONT_KEY_GOTHIC_18));
   text_layer_set_text_alignment(current_classroom, GTextAlignmentCenter);
@@ -107,14 +107,18 @@ static void window_unload(Window *w) {
    window_destroy(window);
 }
 
-static void update(char *current_session_text,
-                   char *current_classroom_text,
+static void update_remaining_time(int minutes) {
+  text_layer_set_text(time_remaining, human_remaining_time(minutes));
+}
+
+static void update(char *sessions_summary_text,
                    int  remaining_minutes,
-                   char *sessions_summary_text) {
+                   char *current_session_text,
+                   char *current_classroom_text) {
   text_layer_set_text(current_session, current_session_text);
   text_layer_set_text(current_classroom, current_classroom_text);
   text_layer_set_text(current_classroom, current_classroom_text);
-  text_layer_set_text(time_remaining, human_remaining_time(remaining_minutes));
+  update_remaining_time(remaining_minutes);
   text_layer_set_text(sessions_summary, sessions_summary_text);
 }
 
@@ -131,6 +135,7 @@ static void push() {
 }
 
 struct _SummaryWindow SummaryWindow = {
-  .push   = push,
-  .update = update
+  .push                  = push,
+  .update                = update,
+  .update_remaining_time = update_remaining_time
 };

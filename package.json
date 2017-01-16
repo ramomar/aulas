@@ -1,5 +1,5 @@
 {
-  "name": "horario",
+  "name": "Horario",
   "author": "Omar Garza",
   "version": "1.0.0",
   "keywords": [
@@ -29,7 +29,13 @@
       "Summary"
     ],
     "resources": {
-      "media": []
+      "media": [
+        {
+          "type": "png",
+          "name": "BEAR",
+          "file": "bear.png"
+        }
+      ]
     }
   },
   "devDependencies": {
