@@ -10,17 +10,17 @@ describe('SummaryHandling#handleSummaryRequest', function test() {
     const time     = moment('8:40', ['HH:mm']);
     const handling = SummaryHandling(Schedule, makeTestClient(), time, 1);
 
-    const expected = 'SESSION_TIME|0/3|50|VISIO|4204|SISINT|4206';
+    const expected = 'SESSION_TIME|0/3|50|VISIO|4204|SISINT 4206';
     const actual   = handling.handleSummaryRequest();
 
     assert.equal(expected, actual);
   });
 
   it('should yield a correct BREAK_TIME summary', function test() {
-    const time = moment('9:30', ['HH:mm']);
+    const time     = moment('9:30', ['HH:mm']);
     const handling = SummaryHandling(Schedule, makeTestClient(), time, 1);
 
-    const expected = 'BREAK_TIME|1/3|200|SISINT|4206';
+    const expected = 'BREAK_TIME|1/3|200|SISINT 4206';
     const actual   = handling.handleSummaryRequest();
 
     assert.equal(expected, actual);

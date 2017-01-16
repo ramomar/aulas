@@ -36,9 +36,11 @@ function respondSummaryRequest(sessions, client, currentTime) {
       return 'FREE_TIME';
     }
     else if (!currentSession && remainingSessions > 0) {
-      const nextSessionTime =
-        currentTime.clone().add(minutesLeftToNextSession, 'minutes');
-      const nextSession     = sessions.current(nextSessionTime);
+      const sessionTime =
+        // We add one minute because I'm a paranoid dude
+        // lol joking, this fixes weird bug in mobile (PC is ok)
+        currentTime.clone().add(minutesLeftToNextSession+1, 'minutes');
+      const session = sessions.current(sessionTime);
 
       // Summary example: 'BREAK_TIME|2/3|120|AUTO|4201
       return [
@@ -46,10 +48,9 @@ function respondSummaryRequest(sessions, client, currentTime) {
         `${completedSessions}/${totalSessions}`,
         minutesDiff(
           currentTime.clone(),
-          nextSession.startTime.clone()
+          session.startTime.clone()
         ),
-        nextSession.courseNames.short,
-        nextSession.classroom
+        `${session.courseNames.short} ${session.classroom}`
       ].join('|');
     }
     else {
@@ -63,8 +64,7 @@ function respondSummaryRequest(sessions, client, currentTime) {
         ),
         currentSession.courseNames.short,
         currentSession.classroom,
-        nextSession.courseNames.short,
-        nextSession.classroom
+        `${nextSession.courseNames.short} ${nextSession.classroom}`
       ].join('|');
     }
   }
