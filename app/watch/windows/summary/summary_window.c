@@ -22,9 +22,9 @@ static char* human_remaining_time(int minutes) {
   static char human_remaining_minutes_buffer[10];
 
   if (minutes > 60)
-    snprintf(human_remaining_minutes_buffer, sizeof(human_remaining_minutes_buffer), "%d:%d", minutes/60, minutes%60);
+    snprintf(human_remaining_minutes_buffer, sizeof(human_remaining_minutes_buffer), "%02d:%02d", minutes/60, minutes%60);
   else
-    snprintf(human_remaining_minutes_buffer, sizeof(human_remaining_minutes_buffer), "00:%d", minutes);
+    snprintf(human_remaining_minutes_buffer, sizeof(human_remaining_minutes_buffer), "00:%02d", minutes);
 
   return human_remaining_minutes_buffer;
 }
@@ -142,7 +142,7 @@ static void break_time(char *sessions_ratio,
 static void go_home_time(char *sessions_ratio) {
   update_sessions_ratio_layer(sessions_ratio);
   update_session_layer(PARTY_EMOJI);
-  update_classroom_layer("Go home");
+  update_classroom_layer("go home");
   update_remaining_time_layer_dont_display();
 }
 
@@ -160,7 +160,7 @@ static void window_load(Window *w) {
   sessions_ratio_layer = text_layer_create(GRect(15, 20, 144, 14));
   session_layer        = text_layer_create(GRect(0, 100, 144, 24));
   classroom_layer      = text_layer_create(GRect(0, 120, 144, 18));
-  remaining_time_layer = text_layer_create(GRect(0, 138, 144, 14));
+  remaining_time_layer = text_layer_create(GRect(0, 140, 144, 20));
 
   render_status_bar_layer(w);
   render_bear_image_layer(w);
