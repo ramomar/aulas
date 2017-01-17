@@ -35,7 +35,7 @@ describe('SummaryHandling#handleSummaryRequest', function test() {
     const time     = moment('23:30', ['HH:mm']);
     const handling = SummaryHandling(Schedule, testClient, time, 1);
 
-    const expected = 'GO_HOME_TIME';
+    const expected = 'GO_HOME_TIME|3/3';
     const actual   = handling.handleSummaryRequest();
 
     assert.equal(expected, actual);

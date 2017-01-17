@@ -21,12 +21,13 @@ function respondSummaryRequest(sessions, client, currentTime) {
 
   function makeSummary() {
     const completedSessions = totalSessions - remainingSessions;
+    const sessionsRatio     = `${completedSessions}/${totalSessions}`;
 
     if (sessions.available.length == 0) {
       return 'FREE_TIME';
     }
     else if (remainingSessions == 0) {
-      return 'GO_HOME_TIME';
+      return `GO_HOME_TIME|${sessionsRatio}`;
     }
     else if (!currentSession && remainingSessions > 0) {
         /*
@@ -40,7 +41,7 @@ function respondSummaryRequest(sessions, client, currentTime) {
       // Summary example: 'BREAK_TIME|2/3|120|AUTO|4201
       return [
         'BREAK_TIME',
-        `${completedSessions}/${totalSessions}`,
+        sessionsRatio,
         minutesDiff(
           currentTime.clone(),
           session.startTime.clone()
@@ -65,7 +66,7 @@ function respondSummaryRequest(sessions, client, currentTime) {
       // Summary example: 'SESSION_TIME|2/3|50|RED|2304|AUTO|4201'
       return [
         'SESSION_TIME',
-        `${completedSessions}/${totalSessions}`,
+        sessionsRatio,
         minutesDiff(
           currentTime.clone(),
           currentSession.endTime.clone()
