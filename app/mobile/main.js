@@ -1,24 +1,20 @@
 const moment = require('moment');
 
-const Client   = require('./io/client.js');
-const Schedule = require('./schedule/schedule.js');
-
-function SummaryHandling () {
-  return require('./handling/summary-handling.js')
-                (schedule, Client, moment(), moment().day());
-}
+const Client          = require('./io/client.js');
+const Schedule        = require('./schedule/schedule.js');
+const SummaryHandling = require('./handling/summary-handling.js');
 
 function handleAppMessage(msg) {
   console.info('Got message: ' + JSON.stringify(msg));
   if (msg.payload['Summary']) {
-    SummaryHandling().handleSummaryRequest();
+    SummaryHandling.handleSummaryRequest(schedule, moment());
   }
 }
 
 Pebble.addEventListener('ready', () => {
   console.info('Phone is ready.');
   Client.sendMobileReady(() => {
-    SummaryHandling().handleSummaryRequest();
+    SummaryHandling.handleSummaryRequest(schedule, moment());
   });
 });
 
