@@ -25,5 +25,5 @@ extern struct _SummaryWindow {
 
   void(*free_time)(void);
 
-  void(*update_remaining_time)(int minutes);
+  unsigned int(*minute_tick)(void);
 } SummaryWindow;

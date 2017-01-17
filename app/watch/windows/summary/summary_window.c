@@ -18,6 +18,9 @@ static TextLayer      *session_layer;
 static TextLayer      *classroom_layer;
 static TextLayer      *remaining_time_layer;
 
+static unsigned int   remaining_minutes_counter;
+static bool           no_tick = false;
+
 static char* human_remaining_time(int minutes) {
   static char human_remaining_minutes_buffer[10];
 
@@ -27,6 +30,10 @@ static char* human_remaining_time(int minutes) {
     snprintf(human_remaining_minutes_buffer, sizeof(human_remaining_minutes_buffer), "00:%02d", minutes);
 
   return human_remaining_minutes_buffer;
+}
+
+static void set_remaining_time(unsigned int minutes) {
+  remaining_minutes_counter = minutes;
 }
 
 static void update_sessions_ratio_layer(char *sessions_ratio) {
@@ -41,10 +48,10 @@ static void update_classroom_layer(char *classroom) {
   text_layer_set_text(classroom_layer, classroom);
 }
 
-static void update_remaining_time_layer(int minutes) {
+static void update_remaining_time_layer() {
   text_layer_set_background_color(sessions_ratio_layer, GColorClear);
   text_layer_set_text_color(sessions_ratio_layer, GColorBlack);
-  text_layer_set_text(remaining_time_layer, human_remaining_time(minutes));
+  text_layer_set_text(remaining_time_layer, human_remaining_time(remaining_minutes_counter));
 }
 
 static void update_remaining_time_layer_dont_display() {
@@ -53,10 +60,10 @@ static void update_remaining_time_layer_dont_display() {
   text_layer_set_text(remaining_time_layer, "");
 }
 
-static void update_remaining_time_layer_break_time(int minutes) {
+static void update_remaining_time_layer_break_time() {
   text_layer_set_background_color(remaining_time_layer, GColorBlack);
   text_layer_set_text_color(remaining_time_layer, GColorClear);
-  text_layer_set_text(remaining_time_layer, human_remaining_time(minutes));
+  text_layer_set_text(remaining_time_layer, human_remaining_time(remaining_minutes_counter));
 }
 
 static void render_bear_image_layer(Window *w) {
@@ -126,7 +133,8 @@ static void session_time(char *sessions_ratio,
   update_sessions_ratio_layer(sessions_ratio);
   update_session_layer(session);
   update_classroom_layer(classroom);
-  update_remaining_time_layer(remaining_minutes);
+  set_remaining_time(remaining_minutes);
+  update_remaining_time_layer();
 }
 
 static void break_time(char *sessions_ratio,
@@ -136,10 +144,12 @@ static void break_time(char *sessions_ratio,
   update_sessions_ratio_layer(sessions_ratio);
   update_session_layer(next_session);
   update_classroom_layer(next_classroom);
-  update_remaining_time_layer_break_time(remaining_minutes);
+  set_remaining_time(remaining_minutes);
+  update_remaining_time_layer_break_time();
 }
 
 static void go_home_time(char *sessions_ratio) {
+  no_tick = true;
   update_sessions_ratio_layer(sessions_ratio);
   update_session_layer(PARTY_EMOJI);
   update_classroom_layer("go home");
@@ -147,10 +157,21 @@ static void go_home_time(char *sessions_ratio) {
 }
 
 static void free_time() {
+  no_tick = true;
   update_sessions_ratio_layer("0/0");
   update_session_layer(BEER_EMOJI);
   update_classroom_layer("yeah");
   update_remaining_time_layer_dont_display();
+}
+
+static unsigned int minute_tick() {
+  if (no_tick) {
+    return 1;
+  } else {
+    remaining_minutes_counter -= 1;
+    update_remaining_time_layer();
+    return remaining_minutes_counter;
+  }
 }
 
 static void window_load(Window *w) {
@@ -194,11 +215,11 @@ static void push() {
 }
 
 struct _SummaryWindow SummaryWindow = {
-  .push                  = push,
-  .update                = update,
-  .session_time          = session_time,
-  .break_time            = break_time,
-  .go_home_time          = go_home_time,
-  .free_time             = free_time,
-  .update_remaining_time = update_remaining_time_layer
+  .push         = push,
+  .update       = update,
+  .session_time = session_time,
+  .break_time   = break_time,
+  .go_home_time = go_home_time,
+  .free_time    = free_time,
+  .minute_tick  = minute_tick
 };
