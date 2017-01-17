@@ -19,26 +19,21 @@ function respondSummaryRequest(sessions, client, currentTime) {
   const remainingSessions        = sessions.remaining(currentTime).length;
   const minutesLeftToNextSession = sessions.minutesToNextSession(currentTime);
 
-  let nextSession = sessions
-    .current(currentTime.clone().add(minutesLeftToNextSession, 'minutes'));
-
-  if (!nextSession) {
-    nextSession = {
-      courseNames: {short: '(:'},
-      classroom: '...'
-    };
-  }
-
   function makeSummary() {
     const completedSessions = totalSessions - remainingSessions;
 
-    if (remainingSessions == 0 || sessions.available.length == 0) {
+    if (sessions.available.length == 0) {
       return 'FREE_TIME';
     }
+    else if (remainingSessions == 0) {
+      return 'GO_HOME_TIME';
+    }
     else if (!currentSession && remainingSessions > 0) {
+        /*
+          We add one minute because I'm a paranoid dude
+          lol joking, this fixes a weird bug in mobile (PC is ok)
+        */
       const sessionTime =
-        // We add one minute because I'm a paranoid dude
-        // lol joking, this fixes weird bug in mobile (PC is ok)
         currentTime.clone().add(minutesLeftToNextSession+1, 'minutes');
       const session = sessions.current(sessionTime);
 
@@ -50,10 +45,23 @@ function respondSummaryRequest(sessions, client, currentTime) {
           currentTime.clone(),
           session.startTime.clone()
         ),
-        `${session.courseNames.short} ${session.classroom}`
+        `${session.courseNames.short}|${session.classroom}`
       ].join('|');
     }
     else {
+      let nextSessionSummary;
+
+      if (Number.isNaN(minutesLeftToNextSession)) {
+        nextSessionSummary = 'GO_HOME_TIME';
+      } else {
+        const nextSession = sessions
+          .current(currentTime.clone()
+          .add(minutesLeftToNextSession, 'minutes'));
+
+        nextSessionSummary =
+          `${nextSession.courseNames.short}|${nextSession.classroom}`;
+      }
+
       // Summary example: 'SESSION_TIME|2/3|50|RED|2304|AUTO|4201'
       return [
         'SESSION_TIME',
@@ -64,7 +72,7 @@ function respondSummaryRequest(sessions, client, currentTime) {
         ),
         currentSession.courseNames.short,
         currentSession.classroom,
-        `${nextSession.courseNames.short} ${nextSession.classroom}`
+        nextSessionSummary
       ].join('|');
     }
   }

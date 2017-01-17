@@ -45,13 +45,15 @@ const Schedule = function (schedule) {
 
     function minutesToNextSession(sessions) {
       return (currentTime) => {
-        const minutes = remainingSessions(sessions)(currentTime)
+        const minutesDiffs = remainingSessions(sessions)(currentTime)
           .sort(sessionsAscendingOrder)
           .map(s => s.startTime.diff(currentTime, 'minutes'))
           .filter(m => m > 0);
 
-        if (minutes.length > 0)
-          return minutes.reduce((acc, e) => Math.min(acc, e));
+        const minDifference = (acc, e) => Math.min(acc, e);
+
+        if (minutesDiffs.length > 0)
+          return minutesDiffs.reduce(minDifference);
         else
           return NaN;
       }
