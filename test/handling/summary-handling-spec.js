@@ -9,7 +9,7 @@ describe('SummaryHandling#handleSummaryRequest', function test() {
   it('should yield a correct SESSION_TIME summary', function() {
     const timeA     = moment('8:40', ['HH:mm']);
     const handlingA = SummaryHandling(Schedule, testClient, timeA, 1);
-    const expectedA = 'SESSION_TIME|0/3|50|VISIO|4204|SISINT|4206';
+    const expectedA = 'SESSION_TIME|0/3|50|VISIO|4204|SESSION_TIME|SISINT|4206|250';
     const actualA   = handlingA.handleSummaryRequest();
 
     const timeB     = moment('17:20', ['HH:mm']);

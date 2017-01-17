@@ -59,8 +59,12 @@ function respondSummaryRequest(sessions, client, currentTime) {
           .current(currentTime.clone()
           .add(minutesLeftToNextSession, 'minutes'));
 
-        nextSessionSummary =
-          `${nextSession.courseNames.short}|${nextSession.classroom}`;
+        nextSessionSummary = [
+          'SESSION_TIME',
+          nextSession.courseNames.short,
+          nextSession.classroom,
+          minutesLeftToNextSession
+        ].join('|');
       }
 
       // Summary example: 'SESSION_TIME|2/3|50|RED|2304|AUTO|4201'
