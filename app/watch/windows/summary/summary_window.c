@@ -18,7 +18,7 @@ static TextLayer      *session_layer;
 static TextLayer      *classroom_layer;
 static TextLayer      *remaining_time_layer;
 
-static unsigned int   remaining_minutes_counter;
+static unsigned int   remaining_minutes_counter = 1;
 static bool           no_tick = false;
 
 static char* human_remaining_time(int minutes) {
