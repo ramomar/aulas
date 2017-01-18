@@ -28,12 +28,8 @@ function makeSummaryResponse(sessions, currentTime) {
     return `GO_HOME_TIME|${sessionsRatio}`;
   }
   else if (!currentSession && remainingSessions > 0) {
-    /*
-     We add one minute because I'm a paranoid dude
-     lol joking, this fixes a weird bug in mobile (PC is ok)
-     */
     const sessionTime =
-      currentTime.clone().add(minutesLeftToNextSession+1, 'minutes');
+      currentTime.clone().add(minutesLeftToNextSession, 'minutes');
     const session = sessions.current(sessionTime);
 
     // Summary example: 'BREAK_TIME|2/3|120|AUTO|4201
@@ -55,7 +51,7 @@ function makeSummaryResponse(sessions, currentTime) {
     } else {
       const nextSession = sessions
         .current(currentTime.clone()
-          .add(minutesLeftToNextSession, 'minutes'));
+        .add(minutesLeftToNextSession, 'minutes'));
 
       nextSessionSummary = [
         'SESSION_TIME',

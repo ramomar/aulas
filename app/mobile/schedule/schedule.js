@@ -47,7 +47,7 @@ const Schedule = function (schedule) {
       return (currentTime) => {
         const minutesDiffs = remainingSessions(sessions)(currentTime)
           .sort(sessionsAscendingOrder)
-          .map(s => s.startTime.diff(currentTime, 'minutes'))
+          .map(s => s.startTime.diff(currentTime, 'minutes', true))
           .filter(m => m > 0);
 
         const minDifference = (acc, e) => Math.min(acc, e);

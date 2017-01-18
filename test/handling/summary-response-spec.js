@@ -26,14 +26,30 @@ describe('SummaryResponses#makeSummaryResponse', function test() {
   });
 
   it('should yield a correct BREAK_TIME summary', function test() {
-    const time =
+    const timeA =
       moment('9:30', ['HH:mm']);
-    const expected =
+    const expectedA =
       'BREAK_TIME|1/3|200|SISINT|4206';
-    const actual = SummaryResponses
-        .makeSummaryResponse(Schedule.weekdayCourses(1).sessions, time);
+    const actualA = SummaryResponses
+        .makeSummaryResponse(Schedule.weekdayCourses(1).sessions, timeA);
 
-    assert.equal(expected, actual);
+    const timeB =
+      moment('10:20:59:999', ['HH:mm:s:SSS']);
+    const expectedB =
+      'BREAK_TIME|3/9|400|AUTO|4212';
+    const actualB = SummaryResponses
+      .makeSummaryResponse(Schedule.weekdayCourses(2).sessions, timeB);
+
+    const timeC =
+      moment('10:20', ['HH:mm']);
+    const expectedC =
+      'BREAK_TIME|3/9|400|AUTO|4212';
+    const actualC = SummaryResponses
+      .makeSummaryResponse(Schedule.weekdayCourses(2).sessions, timeC);
+
+    assert.equal(expectedA, actualA);
+    assert.equal(expectedB, actualB);
+    assert.equal(expectedC, actualC);
   });
 
   it('should yield a correct GO_HOME_TIME summary', function test() {
