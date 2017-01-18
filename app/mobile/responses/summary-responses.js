@@ -57,7 +57,7 @@ function makeSummaryResponse(sessions, currentTime) {
         'SESSION_TIME',
         nextSession.courseNames.short,
         nextSession.classroom,
-        minutesLeftToNextSession
+        Math.round(minutesLeftToNextSession)
       ].join('|');
     }
 
