@@ -49,8 +49,6 @@ static void update_classroom_layer(char *classroom) {
 }
 
 static void update_remaining_time_layer() {
-  text_layer_set_background_color(sessions_ratio_layer, GColorClear);
-  text_layer_set_text_color(sessions_ratio_layer, GColorBlack);
   text_layer_set_text(remaining_time_layer, human_remaining_time(remaining_minutes_counter));
 }
 
@@ -130,6 +128,8 @@ static void session_time(char *sessions_ratio,
                          char *session,
                          char *classroom,
                          int remaining_minutes) {
+  text_layer_set_background_color(remaining_time_layer, GColorClear);
+  text_layer_set_text_color(remaining_time_layer, GColorBlack);
   update_sessions_ratio_layer(sessions_ratio);
   update_session_layer(session);
   update_classroom_layer(classroom);
