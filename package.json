@@ -11,7 +11,7 @@
     "console": "export NODE_PATH=./app/; node"
   },
   "pebble": {
-    "displayName": "horario",
+    "displayName": "Horario",
     "uuid": "4f67e77f-a9e9-4ea6-ae58-71e5c704e0f4",
     "sdkVersion": "3",
     "enableMultiJS": true,
