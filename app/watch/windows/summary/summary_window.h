@@ -6,10 +6,10 @@
 extern struct _SummaryWindow {
   void(*push)(void);
 
-  void(*update)(char *sessions_ratio,
-                char *session,
-                char *classroom,
-                int remaining_minutes);
+  void(*update_summary)(char *sessions_ratio,
+                        char *session,
+                        char *classroom,
+                        int remaining_minutes);
 
   void(*session_time)(char *sessions_ratio,
                       char *current_session,

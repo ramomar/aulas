@@ -32,7 +32,7 @@ function makeSummaryResponse(sessions, currentTime) {
       currentTime.clone().add(minutesLeftToNextSession, 'minutes');
     const session = sessions.current(sessionTime);
 
-    // Summary example: 'BREAK_TIME|2/3|120|AUTO|4201
+    // Summary example: 'BREAK_TIME|2/3|120|AUTO|4201'
     return [
       'BREAK_TIME',
       sessionsRatio,

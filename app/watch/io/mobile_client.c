@@ -2,6 +2,7 @@
 
 static bool mobile_ready;
 static SummaryMessageHandler *summary_msg_handler;
+static SessionsMessageHandler *sessions_msg_handler;
 
 static void handle_received(DictionaryIterator *iter, void *ctx) {
   if (!mobile_ready) {
@@ -12,9 +13,11 @@ static void handle_received(DictionaryIterator *iter, void *ctx) {
       APP_LOG(APP_LOG_LEVEL_INFO, "Client connected.");
     }
   } else {
-    Tuple *summary_payload = dict_find(iter, MESSAGE_KEY_Summary);
+    Tuple *summary_payload  = dict_find(iter, MESSAGE_KEY_Summary);
+    Tuple *sessions_payload = dict_find(iter, MESSAGE_KEY_Sessions);
 
-    if (summary_payload) summary_msg_handler(summary_payload);
+    if (summary_payload)  summary_msg_handler(summary_payload);
+    if (sessions_payload) sessions_msg_handler(sessions_payload);
   }
 }
 
@@ -30,8 +33,21 @@ static void request_summary(void) {
   result = app_message_outbox_send();
 }
 
-static void init(SummaryMessageHandler *summary_msg_hl) {
-  summary_msg_handler = summary_msg_hl;
+static void request_sessions(void) {
+  DictionaryIterator *msg;
+
+  AppMessageResult result = app_message_outbox_begin(&msg);
+
+  if (result == APP_MSG_OK) {
+    dict_write_cstring(msg, MESSAGE_KEY_Sessions, SESSIONS);
+  }
+
+  result = app_message_outbox_send();
+}
+
+static void init(struct MobileClientHandlers *handlers) {
+  summary_msg_handler  = handlers->summary_msg_handler;
+  sessions_msg_handler = handlers->sessions_msg_handler;
 
   app_message_register_inbox_received(handle_received);
 
@@ -40,6 +56,7 @@ static void init(SummaryMessageHandler *summary_msg_hl) {
 }
 
 struct _MobileClient MobileClient = {
-  .init            = init,
-  .request_summary = request_summary
+  .init             = init,
+  .request_summary  = request_summary,
+  .request_sessions = request_sessions
 };

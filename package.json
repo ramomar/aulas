@@ -1,6 +1,6 @@
 {
   "name": "Horario",
-  "author": "Omar Garza",
+  "author": "Eduardo Garza",
   "version": "1.0.0",
   "keywords": [
     "schedule"
@@ -26,7 +26,8 @@
     },
     "messageKeys": [
       "MobileReady",
-      "Summary"
+      "Summary",
+      "Sessions"
     ],
     "resources": {
       "media": [

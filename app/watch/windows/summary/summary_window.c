@@ -1,10 +1,10 @@
 #include "summary_window.h"
 
-#define ANIMATED          true
+#define ANIMATED      true
 
-#define VICTORY_EMOJI     "\U0000270C" /*✌*/
-#define BEER_EMOJI        "\U0001F37A"
-#define PARTY_EMOJI       "\U0001F389"
+#define VICTORY_EMOJI "\U0000270C" /*✌*/
+#define BEER_EMOJI    "\U0001F37A"
+#define PARTY_EMOJI   "\U0001F389"
 
 static Window         *window;
 
@@ -114,10 +114,10 @@ static void render_remaining_time_layer(Window *w) {
   layer_add_child(window_get_root_layer(w), text_layer_get_layer(remaining_time_layer));
 }
 
-static void update(char *sessions_ratio,
-                   char *session,
-                   char *classroom,
-                   int remaining_minutes) {
+static void update_summary(char *sessions_ratio,
+                           char *session,
+                           char *classroom,
+                           int remaining_minutes) {
   update_sessions_ratio_layer(sessions_ratio);
   update_session_layer(session);
   update_classroom_layer(classroom);
@@ -215,11 +215,11 @@ static void push() {
 }
 
 struct _SummaryWindow SummaryWindow = {
-  .push         = push,
-  .update       = update,
-  .session_time = session_time,
-  .break_time   = break_time,
-  .go_home_time = go_home_time,
-  .free_time    = free_time,
-  .minute_tick  = minute_tick
+  .push           = push,
+  .update_summary = update_summary,
+  .session_time   = session_time,
+  .break_time     = break_time,
+  .go_home_time   = go_home_time,
+  .free_time      = free_time,
+  .minute_tick    = minute_tick
 };
