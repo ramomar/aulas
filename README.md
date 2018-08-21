@@ -1,7 +1,9 @@
 Pebble Schedule
 ==========
 
-![small-session-change](https://user-images.githubusercontent.com/10622989/28222664-1ac18fe6-688e-11e7-9d4f-35c067d47089.gif)
+<p align="center">
+   <img src="https://user-images.githubusercontent.com/10622989/28222664-1ac18fe6-688e-11e7-9d4f-35c067d47089.gif">
+</p>
 
 A simple app/watchface I made to help myself with my uni schedule.
 In order to extract the schedule to be shown, I made use of one of my [scripts](https://github.com/ramomar/siase-schedule-scraper).
