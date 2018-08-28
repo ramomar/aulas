@@ -8,7 +8,8 @@ Pebble Schedule
 A simple app/watchface I made to help myself with my uni schedule.
 In order to extract the schedule to be shown, I made use of one of my [scripts](https://github.com/ramomar/siase-schedule-scraper).
 
-Currently it has the following features:
+
+## Features
 - Display of current session name, classroom, and remaining time.
 - Display of next session name, classroom, and standby time.
 - Display of finished sessions/remaining sessions of the day.
